@@ -5,8 +5,7 @@ import yfinance as yf
 
 
 
-
-# Define the structure of the data we want to get from the data from LLM model
+# Define the pydantic models for the data we want to get from the LLM model
 
 class News(BaseModel):
     "Schema for an extracted news from the web"
