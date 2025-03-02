@@ -66,38 +66,42 @@ class ManagerResponse(BaseModel):
 
 
 
-def get_historical_prices(symbol: str, period: str = "6mo"):
+def get_historical_prices(symbol: str, period: int = 6):
     """
         Use this function to get the historical stock price for a given symbol.
 
         Args:
             symbol (str): The stock symbol.
-            period (str): The period for which to retrieve historical prices. Defaults to "6mo".
-                        Valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
+            period (int): The period for which to retrieve historical prices. Defaults to 6.
+                        Valid periods: 1,3,6,12,24 in months
 
         Returns:
           str: JSON formated string containing the historical prices of the company stock over the specified period
     """
     
+    period_mapping = {
+        1: "1mo",
+        3: "3mo",
+        6: "6mo",
+        12: "1y",
+        24: "2y"
+    }
+
     interval_mapping = {
-        'ytd': '1d',
-        "1d": "1d",
-        "5d": "1d",
         "1mo": "1d",
         "3mo": "1wk",
         "6mo": "1wk",
         "1y": "1wk",
         "2y": "1mo",
-        "5y": "3mo",
-        "10y": "3mo",
-        "ytd": "1d",
-        "max": "3mo"
     }
-    # Select the optimal interval
-    interval = interval_mapping.get(period, "1wk")
+
+
+    period_str = period_mapping[period]
+    interval = interval_mapping[period_str]
+
     try:
         stock = yf.Ticker(symbol)
-        historical_price = stock.history(period=period, interval=interval)
+        historical_price = stock.history(period=period_str, interval=interval)
         return historical_price.to_json(orient="index", date_format="iso")
     except Exception as e:
         raise ValueError(f"Error fetching historical data for {symbol}: {e}")

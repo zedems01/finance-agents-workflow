@@ -1,9 +1,7 @@
 from agno.agent import Agent
-# from agno.utils.pprint import pprint_run_response
 from agno.models.openai import OpenAIChat
 from agno.storage.agent.sqlite import SqliteAgentStorage
 from agno.tools.duckduckgo import DuckDuckGoTools
-# from agno.tools.yfinance import YFinanceTools
 
 from tools import *
 
@@ -19,12 +17,11 @@ web_agent = Agent(
     role="Search the web for information about companies",
     model=OpenAIChat(id="gpt-4o"),
     tools=[DuckDuckGoTools()],
-    storage=SqliteAgentStorage(table_name="web_agent", db_file="./storage/agents.db"),
     instructions=[
                     "Search the latest news about the company provided",
                     "If there are more than one company, seach for at most 1 news for each one",
-                    "Summarize the news and give an analysis of the impact that it could have on the stock price",
-                    "Provide the source urls of the news"
+                    "Summarize the news, include sources urls",
+                    "Give an analysis of the impact that the news could have on the stock price"
                 ],
     storage=SqliteAgentStorage(table_name="web_agent", db_file="./storage/team_database.db"),
     structured_outputs=True,
@@ -38,7 +35,7 @@ finance_agent = Agent(
     description="Get the historical prices of the companies provided",
     model=OpenAIChat(id="gpt-4o"),
     tools=[get_historical_prices],
-    storage=SqliteAgentStorage(table_name="finance_agent", db_file="./storage/agents.db"),
+    storage=SqliteAgentStorage(table_name="finance_agent", db_file="./storage/team_database.db"),
     structured_outputs=True,
     response_model=FinancialDataResponse
 )
@@ -59,8 +56,8 @@ dataviz_agent = Agent(
 )
 
 
-front_end_agent = Agent(
-    name="Front End Agent",
+frontend_agent = Agent(
+    name="Frontend Agent",
     role="Create html page to display the final page",
     model=OpenAIChat(id="gpt-4o"),
     instructions=[
@@ -75,7 +72,7 @@ front_end_agent = Agent(
 
 
 manager_agent = Agent(
-    team=[web_agent, finance_agent, dataviz_agent, front_end_agent],
+    team=[web_agent, finance_agent, dataviz_agent, frontend_agent],
     name="Manager Agent (Web + Finance + Data Visualization + Front End)",
     model=OpenAIChat(id="gpt-4o"),
     instructions=[
@@ -83,26 +80,11 @@ manager_agent = Agent(
                     "First, use the web agent to get the latest news about the companies provided",
                     "Then, ask the Finance Agent for the history of the financial data for companies",
                     "Next, ask the Data Visualization Agent to create a chart in html code from the financial data you will get from the Finance Agent",
-                    "Finally, provide the Front End Agent all the responses you got from the other agents to create a beautiful html page that will display a final report (do not forget to include the chart).",
+                    "Finally, provide the Front End Agent all the responses you got from the other agents to create a beautiful html page that will display a final report (You must include the chart).",
                 ],
     storage=SqliteAgentStorage(table_name="manager_agent", db_file="./storage/team_database.db"),
     structured_outputs=True,
     response_model=ManagerResponse
 )
-
-
-if __name__ == "__main__":
-
-    company_1 = input("First company: ")
-    company_2 = input("Second company: ")
-    company_3 = input("Third company: ")
-    period = input("Period (ytd, 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y): ")
-
-    user_query = f"I want an analysis of {company_1}, {company_2} and {company_3} stocks over the last {period}."
-
-    response = manager_agent.run(user_query)
-
-    web_page_html_code = response.content.complete_page_html_code
-
 
 

@@ -129,7 +129,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+
 draft/
+*.db 
 
 # Spyder project settings
 .spyderproject
