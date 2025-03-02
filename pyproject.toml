@@ -1,0 +1,19 @@
+[project]
+name = "ai-finance-agent-team"
+version = "0.1.0"
+description = "A team of AI agents that work together as a financial analyst"
+authors = [
+    {name = "zedems01", email = "nguessie.achille@gmail.com"},
+]
+dependencies = ["agno>=1.1.7", "streamlit>=1.42.2", "openai>=1.65.2", "duckduckgo-search>=7.5.0", "ipykernel>=6.29.5", "python-dotenv>=1.0.1", "sqlalchemy>=2.0.38", "yfinance>=0.2.54", "fastapi>=0.115.10", "pydantic>=2.10.6"]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
