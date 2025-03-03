@@ -65,7 +65,6 @@ class ManagerResponse(BaseModel):
 
 
 
-
 def get_historical_prices(symbol: str, period: int = 6):
     """
         Use this function to get the historical stock price for a given symbol.
@@ -86,7 +85,6 @@ def get_historical_prices(symbol: str, period: int = 6):
         12: "1y",
         24: "2y"
     }
-
     interval_mapping = {
         "1mo": "1d",
         "3mo": "1wk",
@@ -94,8 +92,6 @@ def get_historical_prices(symbol: str, period: int = 6):
         "1y": "1wk",
         "2y": "1mo",
     }
-
-
     period_str = period_mapping[period]
     interval = interval_mapping[period_str]
 
@@ -103,5 +99,6 @@ def get_historical_prices(symbol: str, period: int = 6):
         stock = yf.Ticker(symbol)
         historical_price = stock.history(period=period_str, interval=interval)
         return historical_price.to_json(orient="index", date_format="iso")
+    
     except Exception as e:
         raise ValueError(f"Error fetching historical data for {symbol}: {e}")
