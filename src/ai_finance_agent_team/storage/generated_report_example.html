@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analysis Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+        section {
+            padding: 2em;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 1em;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .news-item {
+            margin: 1em 0;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .chart {
+            text-align: center;
+            margin: 2em 0;
+        }
+        canvas {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Financial Analysis of Microsoft and Tesla</h1>
+</header>
+
+<section class="container">
+    <h2>Overview</h2>
+    <p>This report provides a summary of the latest financial activities and performance analysis of Microsoft and Tesla stocks over the past month. With data derived from the latest market trends and news, we aim to offer a clear understanding of each company's recent financial trajectory.</p>
+
+    <h2>Latest News</h2>
+    <div class="news-item">
+        <h3>Microsoft Outlook, 365 'global outage' affects millions</h3>
+        <p>Microsoft Outlook, 365, and other services experienced a global outage affecting millions, particularly in the United States, although services were restored in less than an hour. Such outages may impact customer trust in Microsoft's cloud services temporarily, potentially affecting the stock price negatively, especially if recurring. However, since the service was quickly restored, the impact may be minimal if addressed effectively.</p>
+    </div>
+    <div class="news-item">
+        <h3>Anti-DOGE protests at Tesla stores target Elon Musk's bottom line</h3>
+        <p>Protests have been organized at Tesla outlets across the U.S. against CEO Elon Musk due to his political activities, particularly related to government spending policies. Public protests against Elon Musk's political maneuvers could harm Tesla's brand reputation, leading to a potential negative impact on the stock price if consumer sentiment swings negatively. Ongoing negative publicity could exacerbate this effect.</p>
+    </div>
+
+    <h2>Historical Financial Data Chart</h2>
+    <div class="chart">
+        <canvas id="stockChart"></canvas>
+        <script>
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            const stockChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2025-02-03', '2025-02-04', '2025-02-05', '2025-02-06', '2025-02-07', 
+                             '2025-02-10', '2025-02-11', '2025-02-12', '2025-02-13', '2025-02-14', 
+                             '2025-02-18', '2025-02-19', '2025-02-20', '2025-02-21', '2025-02-24', 
+                             '2025-02-25', '2025-02-26', '2025-02-27', '2025-02-28'],
+                    datasets: [{
+                        label: 'Microsoft',
+                        data: [410.0977, 411.5448, 412.4630, 414.9879, 408.9301, 411.3951, 410.6167, 408.2215, 
+                               409.7185, 407.6127, 408.8203, 413.9400, 416.1300, 408.2100, 404.0000, 397.9000, 
+                               399.7300, 392.5300, 396.9900],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        fill: false,
+                    }, {
+                        label: 'Tesla',
+                        data: [383.6800, 392.2100, 378.1700, 374.3200, 361.6200, 350.7300, 328.5000, 336.5100, 
+                               355.9400, 355.8400, 354.1100, 360.5600, 354.4000, 337.8000, 330.5300, 302.8000, 
+                               290.8000, 281.9500, 292.9800],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Microsoft and Tesla Stock Prices (Last 1 Month)'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Closing Price (USD)'
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+        <p><em>Microsoft and Tesla stock performance comparison over the last month.</em></p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>In summary, both Microsoft and Tesla have shown robust activity in the market, but have also faced distinct challenges. Microsoft's brief outage may have momentarily affected customer confidence, whereas ongoing political protests surrounding Tesla's leadership may bear implications for its public perception. These factors have undoubtedly contributed to their respective stock market performances over the past month, showcasing the intricate balance of technological advancements and public sentiment in driving market dynamics.</p>
+</section>
+
+</body>
+</html>
