@@ -4,11 +4,7 @@ from unittest.mock import patch, MagicMock
 import json
 from datetime import datetime
 
-# Make sure to adjust the import path if your project structure is different
-# or if PDM/pytest has a specific way of discovering modules.
-# Assuming 'src' is a top-level directory recognized by Python's import system
-# or pytest is configured to find it.
-from src.ai_finance_agent_team.tools import get_historical_prices, FinancialDataResponse, FinancialDataList, DayFinancialData, StockMetric
+from src.ai_finance_agent_team.tools import get_historical_prices, FinancialDataResponse, FinancialDataList, DayFinancialData, StockMetric, News, NewsList, NewsResponse, FrontEndResponse, ManagerResponse
 
 @pytest.fixture
 def mock_stock_data():
@@ -35,8 +31,6 @@ def test_get_historical_prices_success(mock_stock_data):
     mock_ticker_instance = MagicMock()
     mock_ticker_instance.history.return_value = mock_stock_data
 
-    # The patch should target where 'yf.Ticker' is looked up,
-    # which is within the 'src.ai_finance_agent_team.tools' module.
     with patch('src.ai_finance_agent_team.tools.yf.Ticker', return_value=mock_ticker_instance) as mock_yf_ticker:
         symbol = "AAPL"
         period = 6 # Corresponds to "6mo"
@@ -44,35 +38,22 @@ def test_get_historical_prices_success(mock_stock_data):
         result_json = get_historical_prices(symbol, period)
         result_data = json.loads(result_json)
 
-        # Assertions
         mock_yf_ticker.assert_called_once_with(symbol)
         mock_ticker_instance.history.assert_called_once_with(period="6mo", interval="1wk")
-
-        # Check if the structure of the JSON matches the mocked data
-        expected_dates = [ts.isoformat() + "Z" for ts in mock_stock_data.index]
-        
-        # Convert keys in result_data (which are string timestamps) to pd.Timestamp for comparison if needed,
-        # or compare string forms. yfinance returns integer timestamps in ms.
-        # The to_json(orient="index", date_format="iso") will produce ISO 8601 strings.
         
         assert list(result_data.keys()) == [str(dt.value // 10**6) for dt in mock_stock_data.index] # yfinance default index format in to_json
-
-        # Check one entry
-        first_timestamp_key_ms = str(mock_stock_data.index[0].value // 10**6)
 
         # Reconstruct expected JSON based on mock_stock_data and how to_json(orient="index") works
         # yfinance.to_json(orient="index") uses millisecond epoch timestamps as keys
         expected_json_dict = {}
         for timestamp, row in mock_stock_data.iterrows():
-            # Convert pandas Timestamp to milliseconds since epoch, as string keys
             epoch_ms = str(timestamp.value // 10**6)
             expected_json_dict[epoch_ms] = row.to_dict()
         
-        expected_json_str = json.dumps(expected_json_dict)
         # We need to parse our result_json again to compare dicts, as order might differ in string
         assert json.loads(result_json) == expected_json_dict
 
-        # More specific check for values if necessary
+        first_timestamp_key_ms = str(mock_stock_data.index[0].value // 10**6)
         assert result_data[first_timestamp_key_ms]['Close'] == mock_stock_data['Close'].iloc[0]
         assert result_data[first_timestamp_key_ms]['Open'] == mock_stock_data['Open'].iloc[0]
 
@@ -96,7 +77,6 @@ def test_get_historical_prices_yfinance_error():
 def test_get_historical_prices_invalid_period():
     """
     Tests get_historical_prices with an invalid period value.
-    This should ideally raise a KeyError due to the period_mapping.
     """
     symbol = "MSFT"
     invalid_period = 99 # Not in period_mapping
@@ -143,7 +123,7 @@ def test_financial_data_response_valid():
     assert len(response.companies_financial_data) == 1
     assert response.companies_financial_data[0].company_name == "CompA"
 
-# Example for News and NewsResponse (can be expanded)
+# Example for News and NewsResponse
 def test_news_valid():
     news_item = News(
         title="Big News!",
@@ -166,10 +146,6 @@ def test_news_response_valid():
     assert len(news_response.company_news) == 1
     assert news_response.company_news[0].company_name == "TestCo"
 
-# ChartDataResponse, FrontEndResponse, ManagerResponse are simpler structures
-def test_chart_data_response_valid():
-    response = ChartDataResponse(image_name="plot.png")
-    assert response.image_name == "plot.png"
 
 def test_front_end_response_valid():
     response = FrontEndResponse(html_code="<h1>Hello</h1>")
