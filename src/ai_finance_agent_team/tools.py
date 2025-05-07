@@ -53,6 +53,13 @@ class ChartDataResponse(BaseModel):
     period: str = Field(description="The period for which the chart data is for")
     html_code: str = Field(description="The html code for the chart")
 
+# class ChartDataResponse(BaseModel):
+#     "Schema for the response of the visualization agent"
+#     # company_name: str = Field(description="The name of the company")
+#     # period: str = Field(description="The period for which the chart data is for")
+#     # python_code: str = Field(description="The Python code for the plot")
+#     image_name: str = Field(description="The name of the plot image")
+
 
 class FrontEndResponse(BaseModel):
     "Schema for the response of the front end agent"

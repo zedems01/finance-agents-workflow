@@ -5,7 +5,7 @@ description = "A team of AI agents that work together as a financial analyst"
 authors = [
     {name = "zedems01", email = "nguessie.achille@gmail.com"},
 ]
-dependencies = ["agno>=1.1.7", "streamlit>=1.42.2", "openai>=1.65.2", "duckduckgo-search>=7.5.0", "ipykernel>=6.29.5", "python-dotenv>=1.0.1", "sqlalchemy>=2.0.38", "yfinance>=0.2.54", "fastapi>=0.115.10", "pydantic>=2.10.6"]
+dependencies = ["agno>=1.1.7", "streamlit>=1.42.2", "openai>=1.65.2", "duckduckgo-search>=7.5.0", "ipykernel>=6.29.5", "python-dotenv>=1.0.1", "sqlalchemy>=2.0.38", "yfinance>=0.2.54", "fastapi>=0.115.10", "pydantic>=2.10.6", "matplotlib>=3.10.1", "plotly>=6.0.1", "mpld3>=0.5.10", "pytest>=8.3.5", "pytest-cov>=6.1.1", "pytest-asyncio>=0.26.0"]
 requires-python = ">=3.12"
 readme = "README.md"
 license = {text = "MIT"}

@@ -8,6 +8,7 @@ from agent_team import manager_agent
 st.set_page_config(
     page_title="AI Finance Agent Team",
     page_icon="💲",
+    # layout="centered",
     layout="wide",
 )
 
@@ -95,4 +96,4 @@ def main():
             )
 
 if __name__ == "__main__":
-    main()
+    main() 
